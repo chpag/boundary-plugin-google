@@ -66,3 +66,10 @@ $ boundary host-sets create plugin -host-catalog-id $HOST_CATALOG_ID -name "filt
 
 $ boundary host-sets create plugin -host-catalog-id $HOST_CATALOG_ID -name "group-example" -description "example using instance groups" -attr instance_group="instance-group-name"
 ```
+
+After generating the host set, create a target.
+
+```shell
+$ boundary targets create tcp -name google -description "Google Cloud" -scope-id p_1234567890 -default-port 22
+$ boundary targets add-host-sources -id $TARGET_ID -host-source $HOST_SET_ID
+```

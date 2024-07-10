@@ -20,3 +20,7 @@ variable "service_account_email" {
   type    = string
   default = null
 }
+
+variable "client_cidr_block" {
+  type = string
+}

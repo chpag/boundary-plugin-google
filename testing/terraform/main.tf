@@ -10,7 +10,7 @@ resource "google_compute_instance" "default" {
 
   boot_disk {
     initialize_params {
-      image  = "debian-cloud/debian-11"
+      image  = "ubuntu-os-cloud/ubuntu-2204-lts"
       labels = var.labels
     }
   }
@@ -21,6 +21,10 @@ resource "google_compute_instance" "default" {
     access_config {
       // Ephemeral public IP
     }
+  }
+
+  metadata = {
+    ssh-keys = "ubuntu:${tls_private_key.ssh.public_key_openssh}"
   }
 
   dynamic "service_account" {
@@ -45,4 +49,15 @@ resource "google_compute_instance_group" "webservers" {
 resource "tls_private_key" "ssh" {
   algorithm = "RSA"
   rsa_bits  = 4096
+}
+
+resource "google_compute_firewall" "rules" {
+  name    = "allow-ssh"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+  source_ranges = [var.client_cidr_block]
 }
