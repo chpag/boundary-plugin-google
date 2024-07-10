@@ -73,3 +73,15 @@ After generating the host set, create a target.
 $ boundary targets create tcp -name google -description "Google Cloud" -scope-id p_1234567890 -default-port 22
 $ boundary targets add-host-sources -id $TARGET_ID -host-source $HOST_SET_ID
 ```
+
+## Setup
+
+You will need to build your own Boundary binary, as Boundary imports the plugins as a dependency.
+
+As a reference, you can review [this fork](https://github.com/joatmon08/boundary/tree/google-plugin) for changes.
+
+To build the fork, go into the repository.
+
+1. Run `make build`.
+1. Authenticate to Google Cloud using `gcloud auth application-default login`.
+1. Run Boundary with `./bin/boundary dev`.
