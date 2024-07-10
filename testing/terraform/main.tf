@@ -40,3 +40,9 @@ resource "google_compute_instance_group" "webservers" {
 
   zone = data.google_compute_zones.available.names[0]
 }
+
+# RSA key of size 4096 bits
+resource "tls_private_key" "ssh" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
