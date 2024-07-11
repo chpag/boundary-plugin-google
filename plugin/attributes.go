@@ -94,14 +94,28 @@ func getSetAttributes(in *structpb.Struct) (*SetAttributes, error) {
 }
 
 func buildListInstancesRequest(attributes *SetAttributes, catalog *CatalogAttributes) *computepb.ListInstancesRequest {
-	instanceRequest := &computepb.ListInstancesRequest{
+	request := &computepb.ListInstancesRequest{
 		Project: catalog.Project,
 		Zone:    catalog.Zone,
 	}
 
 	if len(attributes.Filter) > 1 {
-		instanceRequest.Filter = &attributes.Filter
+		request.Filter = &attributes.Filter
 	}
 
-	return instanceRequest
+	return request
+}
+
+func buildListInstanceGroupsRequest(attributes *SetAttributes, catalog *CatalogAttributes) *computepb.ListInstancesInstanceGroupsRequest {
+	request := &computepb.ListInstancesInstanceGroupsRequest{
+		InstanceGroup: attributes.InstanceGroup,
+		Project:       catalog.Project,
+		Zone:          catalog.Zone,
+	}
+
+	if len(attributes.Filter) > 1 {
+		request.Filter = &attributes.Filter
+	}
+
+	return request
 }

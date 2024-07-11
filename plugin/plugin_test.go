@@ -145,6 +145,114 @@ func TestListHosts(t *testing.T) {
 			},
 		},
 		{
+			name: "get two specific instances with two host sets",
+			req: &pb.ListHostsRequest{
+				Catalog: &hostcatalogs.HostCatalog{
+					Attrs: hostCatalogAttributes,
+				},
+				Sets: []*hostsets.HostSet{
+					{
+						Id: "get-one-instance-by-name-0",
+						Attrs: &hostsets.HostSet_Attributes{
+							Attributes: wrapMap(t, map[string]interface{}{
+								ConstListInstancesFilter: "name = boundary-0",
+							}),
+						},
+					},
+					{
+						Id: "get-one-instance-by-name-2",
+						Attrs: &hostsets.HostSet_Attributes{
+							Attributes: wrapMap(t, map[string]interface{}{
+								ConstListInstancesFilter: "name = boundary-2",
+							}),
+						},
+					},
+				},
+			},
+			expected: []*pb.ListHostsResponseHost{
+				{
+					Name: "boundary-0",
+				},
+				{
+					Name: "boundary-2",
+				},
+			},
+		},
+		{
+			name: "get one instance and an instance group in two host sets",
+			req: &pb.ListHostsRequest{
+				Catalog: &hostcatalogs.HostCatalog{
+					Attrs: hostCatalogAttributes,
+				},
+				Sets: []*hostsets.HostSet{
+					{
+						Id: "get-one-instance-by-name",
+						Attrs: &hostsets.HostSet_Attributes{
+							Attributes: wrapMap(t, map[string]interface{}{
+								ConstListInstancesFilter: "name = boundary-1",
+							}),
+						},
+					},
+					{
+						Id: "get-instance-group",
+						Attrs: &hostsets.HostSet_Attributes{
+							Attributes: wrapMap(t, map[string]interface{}{
+								ConstInstanceGroup: "boundary-servers",
+							}),
+						},
+					},
+				},
+			},
+			expected: []*pb.ListHostsResponseHost{
+				{
+					Name: "boundary-0",
+				},
+				{
+					Name: "boundary-1",
+				},
+				{
+					Name: "boundary-2",
+				},
+			},
+		},
+		{
+			name: "get an instance group and one instance in two host sets",
+			req: &pb.ListHostsRequest{
+				Catalog: &hostcatalogs.HostCatalog{
+					Attrs: hostCatalogAttributes,
+				},
+				Sets: []*hostsets.HostSet{
+					{
+						Id: "get-instance-group",
+						Attrs: &hostsets.HostSet_Attributes{
+							Attributes: wrapMap(t, map[string]interface{}{
+								ConstInstanceGroup: "boundary-servers",
+							}),
+						},
+					},
+					{
+						Id: "get-one-instance-by-name",
+						Attrs: &hostsets.HostSet_Attributes{
+							Attributes: wrapMap(t, map[string]interface{}{
+								ConstListInstancesFilter: "name = boundary-2",
+							}),
+						},
+					},
+				},
+			},
+			expected: []*pb.ListHostsResponseHost{
+				{
+					Name: "boundary-0",
+				},
+				{
+					Name: "boundary-1",
+				},
+				{
+					Name: "boundary-2",
+				},
+			},
+		},
+		{
 			name: "invalid filter",
 			req: &pb.ListHostsRequest{
 				Catalog: &hostcatalogs.HostCatalog{
